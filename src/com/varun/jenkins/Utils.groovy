@@ -17,8 +17,8 @@ class Utils implements Serializable{
 
         // def mvnConfig = readJSON file: config.withArgFile
         // print("pipeline config is ${this.pipeline}")
-        print("env config is ${this.pipeline.env.HOME}")
-        print("env config is ${pipeline.env.HOME}")
+        pipeline.print("env config is ${this.pipeline.env.HOME}")
+        this.pipeline.print("env config is ${pipeline.env.GIT_URL}")
         // bat("${mvnConfig.MAVEN_HOME}/bin/mvn -s ${mvnConfig.MAVEN_SETTINGS} -DskipTests ${config.do}")
 
 
