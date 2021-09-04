@@ -28,7 +28,7 @@ class Utils implements Serializable{
         // TODO: handle the npe possiblity below
         def git_repo = this.pipeline.env.GIT_URL.replaceFirst(/.*\/([\w-]+).*/, '$1')
         this.pipeline.bat("aws --profile ${dockerConfig.AWS_PROFILE} --region ${dockerConfig.AWS_REGION} ecr get-login-password  | docker login --username AWS --password-stdin ${dockerConfig.ECR_REGISTRY}")
-        def img = this.pipeline.docker.build("${dockerConfig.ECR_REGISTRY}/${dockerConfig.DOCKER_REPO_PREFIX}/${git_repo}:${env.BRANCH_NAME}.${this.pipeline.env.BUILD_ID}")
+        def img = this.pipeline.docker.build("${dockerConfig.ECR_REGISTRY}/${dockerConfig.DOCKER_REPO_PREFIX}/${git_repo}:${this.pipeline.env.BRANCH_NAME}.${this.pipeline.env.BUILD_ID}")
         img.push()
     }
 }
