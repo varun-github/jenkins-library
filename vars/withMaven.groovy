@@ -11,7 +11,7 @@ def call(config = {}){
 
     def mvnConfig = readJSON file: config.withArgFile
     print("pipeline config is ${config.pipeline}")
-    print("env config is ${config.pipeline.env}")
+    print("env config is ${config.pipeline.env.HOME}")
     // bat("${mvnConfig.MAVEN_HOME}/bin/mvn -s ${mvnConfig.MAVEN_SETTINGS} -DskipTests ${config.do}")
 
 }
