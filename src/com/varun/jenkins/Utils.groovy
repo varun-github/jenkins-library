@@ -19,7 +19,7 @@ class Utils implements Serializable{
         // print("pipeline config is ${this.pipeline}")
         pipeline.print("mvn config is ${mvnConfig}")
         this.pipeline.print("env config is ${pipeline.env.GIT_URL}")
-        // bat("${mvnConfig.MAVEN_HOME}/bin/mvn -s ${mvnConfig.MAVEN_SETTINGS} -DskipTests ${config.do}")
+        pipeline.bat("${mvnConfig.MAVEN_HOME}/bin/mvn -s ${mvnConfig.MAVEN_SETTINGS} -DskipTests ${config.do}")
 
 
     }
