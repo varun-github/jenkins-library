@@ -10,7 +10,9 @@ def call(config = {}){
     // def jsonSlurper = new JsonSlurper()
 
     def mvnConfig = readJSON file: config.withArgFile
-    bat("${mvnConfig.MAVEN_HOME}/bin/mvn -s ${mvnConfig.MAVEN_SETTINGS} -DskipTests ${config.do}")
+    print("pipeline config is ${config.pipeline}")
+    print("env config is ${config.pipeline.env}")
+    // bat("${mvnConfig.MAVEN_HOME}/bin/mvn -s ${mvnConfig.MAVEN_SETTINGS} -DskipTests ${config.do}")
 
 }
 
