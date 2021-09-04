@@ -3,13 +3,13 @@ terraform {
     bucket = "cloudstudio-tf-state"
     key = "aws/ecs-service/sample-service"
     region = "us-east-2"
-    profile = "wintel"
+    profile = ""
   }
   required_version = ">= 0.12"
 }
 provider "aws" {
   region = "us-east-2"
-  profile = "wintel"
+  profile = ""
 }
 
 # data "aws_secretsmanager_secret" "db_secret" {

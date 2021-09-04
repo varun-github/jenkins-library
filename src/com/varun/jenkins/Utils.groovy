@@ -24,6 +24,15 @@ class Utils implements Serializable{
             return
         }
         def dockerConfig = pipeline.readJSON file: config.withArgFile
+
+        // hack to prevent making sensitive information public. to be removed with private git repos
+        dockerConfig.AWS_REGION = this.pipeline.env.AWS_REGION
+        dockerConfig.AWS_PROFILE = this.pipeline.env.AWS_PROFILE
+        dockerConfig.ECR_REGISTRY = this.pipeline.env.ECR_REGISTRY
+        dockerConfig.DOCKER_REPO_PREFIX = this.pipeline.env.DOCKER_REPO_PREFIX
+        
+
+
         this.pipeline.print("docker env config is ${dockerConfig}")
         // TODO: handle the npe possiblity below
         def git_repo = this.pipeline.env.GIT_URL.replaceFirst(/.*\/([\w-]+).*/, '$1')
