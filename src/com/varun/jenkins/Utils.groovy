@@ -65,7 +65,7 @@ class Utils implements Serializable{
 
         // write tf files to workspace
         this.pipeline.writeJSON file: 'tfVars.json', json: tfVars
-        this.pipeline.writeFile file: 'ecs_service.tf', text: tfVars
+        this.pipeline.writeFile file: 'ecs_service.tf', text: ecsSvcPayload
         this.pipeline.writeFile file: 'variables.tf', text: this.pipeline.libraryResource('com/varun/terraform/fargate-service/variables.tf')
 
         //run tf
