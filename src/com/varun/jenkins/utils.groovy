@@ -1,6 +1,6 @@
 package com.varun.jenkins
 
-class Utils{
+class Utils implements Serializable{
     static def withMaven(pipeline, config) {
         if (!config.withArgFile)  {
             print("mandatory argument withArgFile not supplied, doing nothing")
