@@ -58,9 +58,9 @@ class Utils implements Serializable{
         this.pipeline.print("TF vars = ${tfVars}")
 
         def ecsSvcPayload = this.pipeline.libraryResource ('com/varun/terraform/fargate-service/ecs_service.tf')
-        ecsSvcPayload.replaceAll("bucket = \"\"", "bucket = \"${this.pipeline.env.bucket}\"")
-        ecsSvcPayload.replaceAll("region = \"\"", "region = \"${this.pipeline.env.AWS_REGION}\"")
-        ecsSvcPayload.replaceAll("profile = \"\"", "region = \"${this.pipeline.env.AWS_PROFILE}\"")
+        ecsSvcPayload = ecsSvcPayload.replaceAll("bucket = \"\"", "bucket = \"${this.pipeline.env.bucket}\"")
+        ecsSvcPayload = ecsSvcPayload.replaceAll("region = \"\"", "region = \"${this.pipeline.env.AWS_REGION}\"")
+        ecsSvcPayload = ecsSvcPayload.replaceAll("profile = \"\"", "region = \"${this.pipeline.env.AWS_PROFILE}\"")
         this.pipeline.print("TF svc conte = ${ecsSvcPayload}")
 
 
