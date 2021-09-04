@@ -69,9 +69,7 @@ class Utils implements Serializable{
         this.pipeline.writeFile file: 'variables.tf', text: this.pipeline.libraryResource('com/varun/terraform/fargate-service/variables.tf')
 
         //run tf
-        this.pipeline.docker.image('hashicorp/terraform:1.0.5').inside(" -v c:/Users/write/.aws:/root/.aws -w /workspace --entrypoint sh") {
-            this.pipeline.bat("terraform init")
-        }
-
+        this.pipeline.print("WORKSPACE = ${this.pipeline.env.WORKSPACE}")
+        this.pipeline.docker.image('hashicorp/terraform:1.0.5').run("--rm -v ${this.pipeline.env.WORKSPACE}:/workspace -v c:/Users/write/.aws:/root/.aws -w /workspace", "init") 
     }
 }
