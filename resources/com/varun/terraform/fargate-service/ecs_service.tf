@@ -1,14 +1,14 @@
 terraform {
   backend "s3" {
-    bucket = "cloudstudio-tf-state"
+    bucket = ""
     key = "aws/ecs-service/sample-service"
-    region = "us-east-2"
+    region = ""
     profile = ""
   }
   required_version = ">= 0.12"
 }
 provider "aws" {
-  region = "us-east-2"
+  region = ""
   profile = ""
 }
 
