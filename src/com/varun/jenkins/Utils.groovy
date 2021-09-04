@@ -9,7 +9,7 @@ class Utils implements Serializable{
 
     def withMaven(config) {
         if (!config.withArgFile)  {
-            print("mandatory argument withArgFile not supplied, doing nothing")
+            this.pipeline.print("mandatory argument withArgFile not supplied, doing nothing")
             return
         }
         // def txt = readFile(config.withArgFile)
@@ -20,7 +20,7 @@ class Utils implements Serializable{
     }
     def withDocker(config){
         if (!config.withArgFile)  {
-            print("mandatory argument withArgFile not supplied, doing nothing")
+            this.pipeline.print("mandatory argument withArgFile not supplied, doing nothing")
             return
         }
         def dockerConfig = pipeline.readJSON file: config.withArgFile
