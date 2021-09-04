@@ -55,7 +55,8 @@ class Utils implements Serializable{
         tfVars.vpc_id = this.pipeline.env.vpc_id
         tfVars.lb_listener_arn = this.pipeline.env.lb_listener_arn
         tfVars.tags = pipeline.readJSON text: this.pipeline.env.tags
-        this.pipeline.print("TF vars = ${tfVars}")
+        def tfVarsSring = this.pipeline.writeJSON returnText: true, json: tfVars
+        this.pipeline.print("TF vars = ${tfVarsSring}")
 
         def ecsSvcPayload = this.pipeline.libraryResource ('com/varun/terraform/fargate-service/ecs_service.tf')
         ecsSvcPayload = ecsSvcPayload.replaceAll("bucket = \"\"", "bucket = \"${this.pipeline.env.TF_STATE_BUCKET}\"")
@@ -63,6 +64,7 @@ class Utils implements Serializable{
         ecsSvcPayload = ecsSvcPayload.replaceAll("profile = \"\"", "profile = \"${this.pipeline.env.AWS_PROFILE}\"")
         this.pipeline.print("TF svc conte = ${ecsSvcPayload}")
 
+        // write tf files to workspace
 
     }
 }
