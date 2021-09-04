@@ -70,9 +70,7 @@ class Utils implements Serializable{
 
         //run tf
         this.pipeline.print("WORKSPACE = ${this.pipeline.env.WORKSPACE}")
-        this.pipeline.docker.image('hashicorp/terraform:1.0.5').inside(" -v ${this.pipeline.env.WORKSPACE}:/workspace -v c:/Users/write/.aws:/root/.aws -w /workspace") {
-            this.pipeline.bat("terraform help")
-            this.pipeline.bat("terraform init")
-        }
+        this.pipeline.docker.image('hashicorp/terraform:1.0.5').run(" -v ${this.pipeline.env.WORKSPACE}:/workspace -v c:/Users/write/.aws:/root/.aws -w /workspace", "help")
+        this.pipeline.docker.image('hashicorp/terraform:1.0.5').run(" -v ${this.pipeline.env.WORKSPACE}:/workspace -v c:/Users/write/.aws:/root/.aws -w /workspace", "init")
     }
 }
