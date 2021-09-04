@@ -46,19 +46,23 @@ class Utils implements Serializable{
             this.pipeline.error("mandatory argument withArgFile not supplied, doing nothing")
             return
         }
-        def tfConfig = pipeline.readJSON file: config.withArgFile
+        def tfVars = pipeline.readJSON file: config.withArgFile
 
         // hack to prevent making sensitive information public. to be removed with private git repos
-        tfConfig.aws_region = this.pipeline.env.AWS_REGION
-        tfConfig.cluster_name = this.pipeline.env.cluster_name
-        tfConfig.image_name = this.pipeline.env.image_name
-        tfConfig.vpc_id = this.pipeline.env.vpc_id
-        tfConfig.lb_listener_arn = this.pipeline.env.lb_listener_arn
-        tfConfig.tags = pipeline.readJSON text: this.pipeline.env.tags
+        tfVars.aws_region = this.pipeline.env.AWS_REGION
+        tfVars.cluster_name = this.pipeline.env.cluster_name
+        tfVars.image_name = this.pipeline.env.image_name
+        tfVars.vpc_id = this.pipeline.env.vpc_id
+        tfVars.lb_listener_arn = this.pipeline.env.lb_listener_arn
+        tfVars.tags = pipeline.readJSON text: this.pipeline.env.tags
+        this.pipeline.print("TF vars = ${tfVars}")
 
-        
+        def ecsSvcPayload = this.pipeline.libraryResource ('com/varun/terraform/fargate-service/ecs_service.tf')
+        ecsSvcPayload.replaceAll("bucket = \"\"", "bucket = \"${this.pipeline.env.bucket}\"")
+        ecsSvcPayload.replaceAll("region = \"\"", "region = \"${this.pipeline.env.AWS_REGION}\"")
+        ecsSvcPayload.replaceAll("profile = \"\"", "region = \"${this.pipeline.env.AWS_PROFILE}\"")
+        this.pipeline.print("TF svc conte = ${ecsSvcPayload}")
 
-        this.pipeline.print("TF config = ${tfConfig}")
 
     }
 }
