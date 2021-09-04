@@ -54,7 +54,7 @@ class Utils implements Serializable{
         tfConfig.image_name = this.pipeline.env.image_name
         tfConfig.vpc_id = this.pipeline.env.vpc_id
         tfConfig.lb_listener_arn = this.pipeline.env.lb_listener_arn
-        tfConfig.tags = pipeline.readJSON text: this.pipeline.env.tags
+        // tfConfig.tags = pipeline.readJSON text: this.pipeline.env.tags
 
         
         tfConfig.AWS_PROFILE = this.pipeline.env.AWS_PROFILE
