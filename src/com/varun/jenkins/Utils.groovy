@@ -63,9 +63,9 @@ class Utils implements Serializable{
         ecsSvcPayload = ecsSvcPayload.replaceAll("profile = \"\"", "profile = \"${this.pipeline.env.AWS_PROFILE}\"")
         this.pipeline.print("TF svc conte = ${ecsSvcPayload}")
 
-        // write tf files to workspace
+        // write tf files to workspace and deploy
         this.pipeline.dir("${this.pipeline.env.WORKSPACE}/tf_script"){
-            this.pipeline.writeJSON file: 'tfVars.json', json: tfVars
+            this.pipeline.writeJSON file: 'terraform.tfvars.json', json: tfVars
             this.pipeline.writeFile file: 'ecs_service.tf', text: ecsSvcPayload
             this.pipeline.writeFile file: 'variables.tf', text: this.pipeline.libraryResource('com/varun/terraform/fargate-service/variables.tf')
             this.pipeline.writeFile file: 'tf_cmds.sh', text: 'terraform init && terraform plan -out tfplan && terraform apply tfplan'
