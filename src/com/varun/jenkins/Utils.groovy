@@ -64,15 +64,19 @@ class Utils implements Serializable{
         this.pipeline.print("TF svc conte = ${ecsSvcPayload}")
 
         // write tf files to workspace
-        this.pipeline.writeJSON file: 'tfVars.json', json: tfVars
-        this.pipeline.writeFile file: 'ecs_service.tf', text: ecsSvcPayload
-        this.pipeline.writeFile file: 'variables.tf', text: this.pipeline.libraryResource('com/varun/terraform/fargate-service/variables.tf')
+        this.pipeline.dir("${WORKSPACE}/tf_script"){
+            this.pipeline.writeJSON file: 'tfVars.json', json: tfVars
+            this.pipeline.writeFile file: 'ecs_service.tf', text: ecsSvcPayload
+            this.pipeline.writeFile file: 'variables.tf', text: this.pipeline.libraryResource('com/varun/terraform/fargate-service/variables.tf')
+            this.pipeline.writeFile file: 'tf_cmds.sh', text: 'terraform init && terraform plan -out tfplan && terraform apply tfplan'
+            this.pipeline.bat("docker run --rm -v ${this.pipeline.env.WORKSPACE}:/workspace -v c:/Users/write/.aws:/root/.aws -w /workspace --entrypoint sh hashicorp/terraform:1.0.5 tf_cmds.sh")
+        }
+
 
         //run tf
-        this.pipeline.print("WORKSPACE = ${this.pipeline.env.WORKSPACE}")
+        // this.pipeline.print("WORKSPACE = ${this.pipeline.env.WORKSPACE}")
         // this.pipeline.docker.image('hashicorp/terraform:1.0.5').withRun("--rm -v ${this.pipeline.env.WORKSPACE}:/workspace -v c:/Users/write/.aws:/root/.aws -w /workspace", "init") { c ->
         //     this.pipeline.bat("docker logs ${c.id}")
         // }
-        this.pipeline.bat("docker run --rm -v ${this.pipeline.env.WORKSPACE}:/workspace -v c:/Users/write/.aws:/root/.aws -w /workspace hashicorp/terraform:1.0.5 init")
     }
 }
