@@ -40,6 +40,7 @@ class Utils implements Serializable{
         this.pipeline.bat("aws --profile ${dockerConfig.AWS_PROFILE} --region ${dockerConfig.AWS_REGION} ecr get-login-password  | docker login --username AWS --password-stdin ${dockerConfig.ECR_REGISTRY}")
         def img = this.pipeline.docker.build("${dockerConfig.ECR_REGISTRY}/${dockerConfig.DOCKER_REPO_PREFIX}/${git_repo}:${this.pipeline.env.BRANCH_NAME}.${this.pipeline.env.BUILD_ID}")
         img.push()
+        this.pipeline.env.image_name = img.id
     }
     def withTerraform(config){
         if (!config.withArgFile)  {
