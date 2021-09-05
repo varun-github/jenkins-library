@@ -69,7 +69,7 @@ class Utils implements Serializable{
             this.pipeline.writeFile file: 'ecs_service.tf', text: ecsSvcPayload
             this.pipeline.writeFile file: 'variables.tf', text: this.pipeline.libraryResource('com/varun/terraform/fargate-service/variables.tf')
             this.pipeline.writeFile file: 'tf_cmds.sh', text: 'terraform init && terraform plan -out tfplan && terraform apply tfplan'
-            this.pipeline.bat("docker run --rm -v ${this.pipeline.env.WORKSPACE}:/workspace -v c:/Users/write/.aws:/root/.aws -w /workspace --entrypoint sh hashicorp/terraform:1.0.5 tf_cmds.sh")
+            this.pipeline.bat("docker run --rm -v ${this.pipeline.env.WORKSPACE}/tf_script:/workspace -v c:/Users/write/.aws:/root/.aws -w /workspace --entrypoint sh hashicorp/terraform:1.0.5 tf_cmds.sh")
         }
 
 
