@@ -13,11 +13,12 @@ class Utils implements Serializable{
             this.pipeline.error("mandatory argument withArgFile not supplied, doing nothing")
             return
         }
-        // def txt = readFile(config.withArgFile)
-        // def jsonSlurper = new JsonSlurper()
         def mvnConfig = pipeline.readJSON file: config.withArgFile
         this.pipeline.print("maven env config is ${mvnConfig}")
-        pipeline.bat("${mvnConfig.MAVEN_HOME}/bin/mvn -s ${mvnConfig.MAVEN_SETTINGS} -DskipTests ${config.do}")
+        pipeline.bat("${mvnConfig.MAVEN_HOME}/bin/mvn -s ${mvnConfig.MAVEN_SETTINGS} -Dmaven.test.failure.ignore=true ${config.do}")
+        def junitEmitter = new com.varun.jenkins.telemetry.JUnitEmitter();
+        def output = junitEmitter.emitTestStatus(pipeline.currentBuild.build())
+        pipeline.bat("Test output is " +output)
     }
     def withDocker(config){
         if (!config.withArgFile)  {
@@ -74,10 +75,5 @@ class Utils implements Serializable{
         }
 
 
-        //run tf
-        // this.pipeline.print("WORKSPACE = ${this.pipeline.env.WORKSPACE}")
-        // this.pipeline.docker.image('hashicorp/terraform:1.0.5').withRun("--rm -v ${this.pipeline.env.WORKSPACE}:/workspace -v c:/Users/write/.aws:/root/.aws -w /workspace", "init") { c ->
-        //     this.pipeline.bat("docker logs ${c.id}")
-        // }
     }
 }

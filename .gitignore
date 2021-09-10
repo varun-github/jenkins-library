@@ -1,3 +1,6 @@
 .jenkins/
 out
 .iml
+.idea
+*gdsl
+.gradle
