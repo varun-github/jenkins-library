@@ -5,7 +5,6 @@ import hudson.tasks.junit.CaseResult
 hudson.tasks.junit.TestResult
 import hudson.tasks.test.AbstractTestResultAction
 import hudson.tasks.junit.TestResultSummary
-import junit.framework.TestResult
 
 public class JUnitEmitter implements  Serializable{
     def pipeline
