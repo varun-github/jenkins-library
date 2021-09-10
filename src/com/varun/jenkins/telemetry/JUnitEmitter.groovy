@@ -11,7 +11,8 @@ public class JUnitEmitter implements  Serializable{
     }
 
     def emitTestStatus(){
-        def action = this.pipeline.build.getAction(AbstractTestResultAction.class)
+        def action = this.pipeline.currentBuild.getAction(AbstractTestResultAction.class)
+        org.jenkinsci.plugins.workflow.cps.RunWrapperBinder
         return action.getDisplayName()
     }
 }
