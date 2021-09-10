@@ -18,6 +18,7 @@ class Utils implements Serializable{
         def mvnConfig = pipeline.readJSON file: config.withArgFile
         this.pipeline.print("maven env config is ${mvnConfig}")
         pipeline.bat("${mvnConfig.MAVEN_HOME}/bin/mvn -s ${mvnConfig.MAVEN_SETTINGS} -Dmaven.test.failure.ignore=true ${config.do}")
+        pipeline.junit("target/surefire-reports/TEST*.xml")
         def junitEmitter = new JUnitEmitter(this.pipeline);
         def output = junitEmitter.emitTestStatus()
         pipeline.bat("Test output is " +output)
