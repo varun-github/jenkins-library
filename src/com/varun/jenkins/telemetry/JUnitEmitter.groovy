@@ -21,7 +21,7 @@ public class JUnitEmitter implements  Serializable{
         this.pipeline.echo("test summary to be emitted. passCount =" +summary.passCount+ ", failCount="+ summary.failCount+ ", totalCount=" +summary.totalCount+ ", skipCount=" +summary.skipCount)
 
         def jsonMessage = [
-            detailURL: this.pipeline.env.BUILD_URL + "/testReport/api/json",
+            detailURL: this.pipeline.env.BUILD_URL + "testReport/api/json",
             testPassCount: summary.passCount,
             failCount: summary.failCount,
             totalCount: summary.totalCount,
