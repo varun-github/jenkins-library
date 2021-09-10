@@ -32,13 +32,16 @@ public class JUnitEmitter implements  Serializable{
         def csConf = this.pipeline.readJSON text:  this.pipeline.libraryResource ('com/varun/cloud-studio/config.json')
         
         try {
-            def csConn = new URL(csConf.cloudStudioBaseURL).openConnection()
-            csConn.setRequestMethod("POST")
-            csConn.setDoOutput(true)
-            csConn.setRequestProperty("Content-Type", "application/json")
-            csConn.getOutputStream().write(jsonMessageAsString.getBytes("UTF-8"));
-            def postRC = csConn.getResponseCode();
-            this.pipeline.echo("CS API Response Code: " +postRC)
+            def emitResponse = this.pipeline.httpRequest url: csConf.cloudStudioBaseURL, contentType: 'APPLICATION_JSON', httpMode: 'PUT', requestBody: jsonMessageAsString, timeout: 60
+            this.pipeline.echo("HTTP Requested emitted, response code: " +emitResponse.status)
+            this.pipeline.echo("HTTP Requested emitted, response payload: " +emitResponse.content)
+            // def csConn = new URL(csConf.cloudStudioBaseURL).openConnection()
+            // csConn.setRequestMethod("POST")
+            // csConn.setDoOutput(true)
+            // csConn.setRequestProperty("Content-Type", "application/json")
+            // csConn.getOutputStream().write(jsonMessageAsString.getBytes("UTF-8"));
+            // def postRC = csConn.getResponseCode();
+            // this.pipeline.echo("CS API Response Code: " +postRC)
 
         } catch (Exception e){
             this.pipeline.echo("Exception encountered while emitting junit results")
