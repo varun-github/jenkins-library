@@ -1,5 +1,7 @@
 package com.varun.jenkins
 
+import com.varun.jenkins.telemetry.JUnitEmitter
+
 class Utils implements Serializable{
     def pipeline
     // def 
@@ -16,7 +18,7 @@ class Utils implements Serializable{
         def mvnConfig = pipeline.readJSON file: config.withArgFile
         this.pipeline.print("maven env config is ${mvnConfig}")
         pipeline.bat("${mvnConfig.MAVEN_HOME}/bin/mvn -s ${mvnConfig.MAVEN_SETTINGS} -Dmaven.test.failure.ignore=true ${config.do}")
-        def junitEmitter = new com.varun.jenkins.telemetry.JUnitEmitter();
+        def junitEmitter = new JUnitEmitter();
         def output = junitEmitter.emitTestStatus(pipeline.currentBuild.build())
         pipeline.bat("Test output is " +output)
     }
