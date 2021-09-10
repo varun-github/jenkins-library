@@ -1,13 +1,17 @@
 package com.varun.jenkins.telemetry
 
-import hudson.model.Run
+
 import hudson.tasks.test.AbstractTestResultAction
 
 public class JUnitEmitter implements  Serializable{
-    def JUnitEmitter(){}
+    def pipeline
 
-    def emitTestStatus(Run<?, ?> build){
-        def action = build.getAction(AbstractTestResultAction.class)
+    def JUnitEmitter(pipeline){
+        this.pipeline = pipeline
+    }
+
+    def emitTestStatus(){
+        def action = this.pipeline.currentBuild.getAction(AbstractTestResultAction.class)
         return action.getDisplayName()
     }
 }
