@@ -19,10 +19,10 @@ class Utils implements Serializable{
         this.pipeline.print("maven env config is ${mvnConfig}")
         pipeline.bat("${mvnConfig.MAVEN_HOME}/bin/mvn -s ${mvnConfig.MAVEN_SETTINGS} -Dmaven.test.failure.ignore=true ${config.do}")
 
+    }
+    def withCloudStudio(config=[:]) {
         def junitEmitter = new JUnitEmitter(this.pipeline);
         def output = junitEmitter.recordTestsAndEmit()
-//        pipeline.echo("junit summary " +summary)
-//        pipeline.echo("Test output is " +output)
     }
     def withDocker(config){
         if (!config.withArgFile)  {

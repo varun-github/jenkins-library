@@ -13,20 +13,26 @@ public class JUnitEmitter implements  Serializable{
     }
 
     def recordTestsAndEmit(){
+        def jsonMessage = [
+            pipelineDetailURL: this.pipeline.env.BUILD_URL + "wfapi/describe",
+            jiraEpicKey: this.pipeline.env.EPIC_KEY,
+            // jiraStoryKey: this.pipeline.env.STORY_KEY
+        ]
+
         def TestResultSummary summary = this.pipeline.junit("target/surefire-reports/TEST*.xml")
         if (summary == null) {
             this.pipeline.echo("No test seems to have been recorded. No results to be emitted.")
-            return
+        } else {
+            this.pipeline.echo("test summary to be emitted. passCount =" +summary.passCount+ ", failCount="+ summary.failCount+ ", totalCount=" +summary.totalCount+ ", skipCount=" +summary.skipCount)
+            jsonMessage.putAll([
+                testDetailURL: this.pipeline.env.BUILD_URL + "testReport/api/json",
+                testPassCount: summary.passCount,
+                failCount: summary.failCount,
+                totalCount: summary.totalCount,
+                skipCount: summary.skipCount,
+            ])
         }
-        this.pipeline.echo("test summary to be emitted. passCount =" +summary.passCount+ ", failCount="+ summary.failCount+ ", totalCount=" +summary.totalCount+ ", skipCount=" +summary.skipCount)
 
-        def jsonMessage = [
-            detailURL: this.pipeline.env.BUILD_URL + "testReport/api/json",
-            testPassCount: summary.passCount,
-            failCount: summary.failCount,
-            totalCount: summary.totalCount,
-            skipCount: summary.skipCount
-        ]
         def jsonMessageAsString = this.pipeline.writeJSON json: jsonMessage, returnText: true
         // call cloud studio webhook for test result callback.
         def csConf = this.pipeline.readJSON text:  this.pipeline.libraryResource ('com/varun/cloud-studio/config.json')
@@ -35,14 +41,6 @@ public class JUnitEmitter implements  Serializable{
             def emitResponse = this.pipeline.httpRequest url: csConf.cloudStudioBaseURL, contentType: 'APPLICATION_JSON', httpMode: 'PUT', requestBody: jsonMessageAsString, timeout: 60
             this.pipeline.echo("HTTP Requested emitted, response code: " +emitResponse.status)
             this.pipeline.echo("HTTP Requested emitted, response payload: " +emitResponse.content)
-            // def csConn = new URL(csConf.cloudStudioBaseURL).openConnection()
-            // csConn.setRequestMethod("POST")
-            // csConn.setDoOutput(true)
-            // csConn.setRequestProperty("Content-Type", "application/json")
-            // csConn.getOutputStream().write(jsonMessageAsString.getBytes("UTF-8"));
-            // def postRC = csConn.getResponseCode();
-            // this.pipeline.echo("CS API Response Code: " +postRC)
-
         } catch (Exception e){
             this.pipeline.echo("Exception encountered while emitting junit results")
             def sw = new java.io.StringWriter()
