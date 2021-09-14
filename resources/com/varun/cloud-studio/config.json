@@ -1,5 +1,5 @@
 {
     "userName": "varun.mathur@wipro.com",
     "userToken": "uYYXA2EejbHTyxAjGHOoCC2C",
-    "cloudStudioBaseURL": "http://127.0.0.1:5000/api/telemetry/1.0/jenkins"
+    "cloudStudioBaseURL": "http://127.0.0.1:5000/api/telemetry/1.0/jenkins/pipelines"
 }
